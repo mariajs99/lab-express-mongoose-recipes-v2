@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 app.post("/recipes", async (req, res) => {
   console.log("ruta funcionando");
 
-  Recipe.create({
+  const recipe = await Recipe.create({
     title: req.body.title,
     instructions: req.body.instructions,
     level: req.body.level,
@@ -50,7 +50,7 @@ app.post("/recipes", async (req, res) => {
   });
 
   try {
-    res.send("Receta creada correctamente.");
+    res.send("Receta creada correctamente.", recipe);
   } catch (error) {
     console.log(error);
   }
@@ -101,9 +101,9 @@ app.put("/recipes/:recipeId", async (req, res) => {
 //  DELETE  /recipes/:id route
 
 app.delete("recipes/:recipeId", async (req, res) => {
-  Recipe.findByIdAndDelete(req.params.recipeId);
   try {
-    res.send("todo ok, eliminando documento");
+    const deleted = await Recipe.findByIdAndDelete(req.params.recipeId);
+    res.send("todo ok, eliminando documento", deleted);
   } catch (error) {
     console.log(error);
   }
