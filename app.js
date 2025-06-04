@@ -51,7 +51,6 @@ app.post("/recipes", async (req, res) => {
 
   try {
     res.send("Receta creada correctamente.");
-
   } catch (error) {
     console.log(error);
   }
@@ -75,37 +74,40 @@ app.get("/recipes", async (req, res) => {
 
 app.get("/recipes/:recipeId", async (req, res) => {
   // console.log("viendo receta")
-  Recipe.findById(req.params.recipeId);
   try {
-    res.send("todo ok, viendo receta");
+    const response = await Recipe.findById(req.params.recipeId);
+    res.send("todo ok, viendo receta", response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 
 //  Iteration 6 - Update a Single Recipe
 //  PUT  /recipes/:id route
 
-    app.put("/recipes/:recipeId", async (req, res) => {
-        Recipe.findByIdAndUpdate(req.params.recipeId, req.body, {new: true})
-        try {
-            res.send("todo ok, accediento a ruta editar")
-        } catch (error) {
-            console.log(error)
-        }
-    })
+app.put("/recipes/:recipeId", async (req, res) => {
+  try {
+    const updated = await Recipe.findByIdAndUpdate(
+      req.params.recipeId,
+      req.body,
+      { new: true }
+    );
+    res.status(200).json(updated);
+  } catch (error) {
+    console.log(error);
+  }
+});
 //  Iteration 7 - Delete a Single Recipe
 //  DELETE  /recipes/:id route
 
-    app.delete("recipes/:recipeId", async(req, res) => {
-
-        Recipe.findByIdAndDelete(req.params.recipeId)
-        try {
-            res.send("todo ok, eliminando documento")
-        } catch (error) {
-            console.log(error)
-        }
-    })
+app.delete("recipes/:recipeId", async (req, res) => {
+  Recipe.findByIdAndDelete(req.params.recipeId);
+  try {
+    res.send("todo ok, eliminando documento");
+  } catch (error) {
+    console.log(error);
+  }
+});
 // Start the server
 app.listen(3000, () => console.log("My first app listening on port 3000!"));
 
